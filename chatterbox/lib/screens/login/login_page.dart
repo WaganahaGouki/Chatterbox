@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:chatterbox/auth/auth_service.dart';
 import 'package:chatterbox/components/my_button.dart';
 import 'package:chatterbox/components/my_textfield.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +13,19 @@ class LoginPage extends StatelessWidget {
 
   LoginPage({super.key, this.onTap});
 
-  void login() {
-
-  }
-
-  void moveToRegisterPage() {
-
+  void login(BuildContext context) async {
+    final authService = AuthService();
+    
+    try {
+      await authService.signInWithEmailAndPassword(_emailController.text, _passwordController.text);
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(e.toString()),
+        ),
+      );
+    }
   }
 
   @override
@@ -59,7 +69,7 @@ class LoginPage extends StatelessWidget {
             //login button
             MyButton(
               buttonText: "Login",
-              onTap: login,
+              onTap: () => login(context),
             ),
 
             const SizedBox(height: 10),
