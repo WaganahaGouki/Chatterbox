@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:chatterbox/auth/auth_service.dart';
 import 'package:chatterbox/components/my_button.dart';
 import 'package:chatterbox/components/my_textfield.dart';
