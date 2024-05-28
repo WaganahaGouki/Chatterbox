@@ -1,6 +1,5 @@
 import 'package:chatterbox/themes/dark_mode.dart';
 import 'package:chatterbox/themes/light_mode.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ThemeProvider extends ChangeNotifier{

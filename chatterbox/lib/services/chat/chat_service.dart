@@ -15,17 +15,19 @@ class ChatService {
     });
   }
 
-  Future<void> sendMessage(String receiverID, message) async{
+  Future<void> sendMessage(String receiverID, message, isImage) async{
     final String currentUserID = _auth.currentUser!.uid;
     final String currentUserEmail = _auth.currentUser!.email!;
     final Timestamp timestamp = Timestamp.now();
 
-    Message newMessage = new Message(
-        senderID: currentUserID,
-        senderEmail: currentUserEmail,
-        receiverID: receiverID,
-        message: message,
-        timestamp: timestamp);
+    Message newMessage = Message(
+      senderID: currentUserID,
+      senderEmail: currentUserEmail,
+      receiverID: receiverID,
+      message: message,
+      timestamp: timestamp,
+      isImage: isImage
+    );
 
     List<String> ids = [currentUserID, receiverID];
     ids.sort();

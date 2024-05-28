@@ -1,6 +1,5 @@
 import 'package:chatterbox/services/auth/auth_gate.dart';
 import 'package:chatterbox/firebase_options.dart';
-import 'package:chatterbox/themes/light_mode.dart';
 import 'package:chatterbox/themes/theme_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
