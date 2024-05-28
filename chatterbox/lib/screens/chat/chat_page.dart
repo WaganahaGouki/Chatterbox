@@ -7,6 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+
+import '../../themes/theme_provider.dart';
 
 class ChatPage extends StatefulWidget {
   final String username;
@@ -181,13 +184,14 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildUserInput(){
+    bool isDarkMode = Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return Padding(
       padding: const EdgeInsets.only(bottom: 30.0),
         child: Row(
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.green.shade400,
+                color: isDarkMode ? Colors.green.shade500 : Colors.green.shade400,
                 shape: BoxShape.circle
               ),
               margin: const EdgeInsets.only(left: 25),
@@ -203,7 +207,7 @@ class _ChatPageState extends State<ChatPage> {
               obscureText: false)),
             Container(
               decoration: BoxDecoration(
-                color: Colors.green.shade400,
+                color: isDarkMode ? Colors.green.shade500 : Colors.green.shade400,
                 shape: BoxShape.circle
               ),
               margin: const EdgeInsets.only(right: 25),
