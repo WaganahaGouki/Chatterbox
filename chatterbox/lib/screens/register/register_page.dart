@@ -1,4 +1,4 @@
-import 'package:chatterbox/auth/auth_service.dart';
+import 'package:chatterbox/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import '../../components/my_button.dart';
 import '../../components/my_textfield.dart';
@@ -18,7 +18,7 @@ class RegisterPage extends StatelessWidget {
 
     if(_passwordController.text == _confirmPasswordController.text) {
       try {
-        auth.signUp(_emailController.text, _passwordController.text);
+        auth.signUp(_usernameController.text, _emailController.text, _passwordController.text);
       } catch (e) {
         showDialog(
           context: context,
