@@ -1,3 +1,4 @@
+import 'package:chatterbox/components/chat_buble.dart';
 import 'package:chatterbox/components/my_textfield.dart';
 import 'package:chatterbox/services/auth/auth_service.dart';
 import 'package:chatterbox/services/chat/chat_service.dart';
@@ -28,8 +29,12 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(username),
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.grey,
+        elevation: 0,
       ),
       body: Column(
         children: [
@@ -66,21 +71,32 @@ class ChatPage extends StatelessWidget {
 
     return Container(
       alignment: alignment,
-        child: Text(data["message"])
+        child: ChatBubble(message: data["message"], isCurrentUser: isCurrentUser,)
     );
   }
 
   Widget _buildUserInput(){
-    return Row(
-      children: [
-        Expanded(child: MyTextfield(
-          controller: _messageController,
-          hintText: "Type a message",
-          obscureText: false)),
-        IconButton(
-          onPressed: sendMessage,
-          icon: Icon(Icons.arrow_upward),)
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30.0),
+        child: Row(
+          children: [
+            Expanded(child: MyTextfield(
+              controller: _messageController,
+              hintText: "Type a message",
+              obscureText: false)),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.green.shade400,
+                shape: BoxShape.circle
+              ),
+              margin: const EdgeInsets.only(right: 25),
+              child: IconButton(
+                onPressed: sendMessage,
+                icon: Icon(Icons.arrow_upward),
+                color: Colors.white,)
+            )
+          ],
+        )
     );
   }
 }
