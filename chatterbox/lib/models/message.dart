@@ -7,6 +7,7 @@ class Message{
   final String message;
   final Timestamp timestamp;
   final bool isImage;
+  final bool isVoice;
 
   Message({
     required this.senderID,
@@ -14,7 +15,8 @@ class Message{
     required this.receiverID,
     required this.message,
     required this.timestamp,
-    required this.isImage
+    required this.isImage,
+    required this.isVoice,
   });
 
   Map<String, dynamic> toMap(){
@@ -24,7 +26,8 @@ class Message{
       'receiverID': receiverID,
       'message': message,
       'timestamp': timestamp,
-      'isImage': isImage
+      'isImage': isImage,
+      'isVoice': isVoice,
     };
   }
 }

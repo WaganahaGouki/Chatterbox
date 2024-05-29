@@ -8,7 +8,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
+import '../../permissions/permissions.dart';
+import '../../services/audio/audio_recorder_service.dart';
 import '../../themes/theme_provider.dart';
 
 class ChatPage extends StatefulWidget {
@@ -31,12 +32,19 @@ class _ChatPageState extends State<ChatPage> {
   final AuthService _authService = AuthService();
   File? galleryFile;
   final picker = ImagePicker();
+  final AudioRecorder _audioRecorder = AudioRecorder();
 
   FocusNode myFocusNode = FocusNode();
+
+  Future<void> initializeRecorder() async {
+    await requestMicrophonePermission();
+    await _audioRecorder.init();
+  }
 
   @override
   void initState() {
     super.initState();
+    initializeRecorder();
 
     myFocusNode.addListener(() {
       if (myFocusNode.hasFocus) {
@@ -119,14 +127,14 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _sendMessage(String imageUrl) {
-    _chatService.sendMessage(widget.receiverID, imageUrl, true);
+    _chatService.sendMessage(widget.receiverID, imageUrl, true, false);
 
     scrollDown();
   }
 
   void sendMessage() async {
     if (_messageController.text.isNotEmpty){
-      await _chatService.sendMessage(widget.receiverID, _messageController.text, false);
+      await _chatService.sendMessage(widget.receiverID, _messageController.text, false, false);
       _messageController.clear();
     }
 
@@ -179,7 +187,7 @@ class _ChatPageState extends State<ChatPage> {
 
     return Container(
       alignment: alignment,
-        child: ChatBubble(message: data["message"], isCurrentUser: isCurrentUser, isImage: data["isImage"],)
+        child: ChatBubble(message: data["message"], isCurrentUser: isCurrentUser, isImage: data["isImage"], isVoice: data["isVoice"],)
     );
   }
 
@@ -194,7 +202,7 @@ class _ChatPageState extends State<ChatPage> {
                 color: isDarkMode ? Colors.green.shade500 : Colors.green.shade400,
                 shape: BoxShape.circle
               ),
-              margin: const EdgeInsets.only(left: 25),
+              margin: const EdgeInsets.only(left: 15),
               child: IconButton(
                 onPressed: () => _showPicker(context),
                 icon: const Icon(Icons.image),
@@ -210,11 +218,31 @@ class _ChatPageState extends State<ChatPage> {
                 color: isDarkMode ? Colors.green.shade500 : Colors.green.shade400,
                 shape: BoxShape.circle
               ),
-              margin: const EdgeInsets.only(right: 25),
+              margin: const EdgeInsets.only(right: 15),
               child: IconButton(
                 onPressed: sendMessage,
                 icon: const Icon(Icons.arrow_upward),
                 color: Colors.white,)
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: isDarkMode ? Colors.green.shade500 : Colors.green.shade400,
+                  shape: BoxShape.circle
+              ),
+              margin: const EdgeInsets.only(right: 15),
+              child: IconButton(
+                onPressed: () async {
+                  if (_audioRecorder.isRecording) {
+                    await _audioRecorder.stopRecording();
+                    await ChatService().sendVoiceMessage(widget.receiverID, _audioRecorder.filePath!);
+                  } else {
+                    await _audioRecorder.startRecording();
+                  }
+                  setState(() {});
+                },
+                icon: Icon(_audioRecorder.isRecording ? Icons.stop : Icons.mic),
+                color: Colors.white,
+              )
             )
           ],
         )
